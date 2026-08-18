@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, PhoneCall, MessageCircleHeart, Target, LifeBuoy } from "lucide-react";
 import Navbar from "../components/Navbar";
@@ -20,6 +21,12 @@ export default function Consultation() {
   const [date, setDate] = useState("Fri, 22 Nov");
   const [time, setTime] = useState("11:00 AM");
   const [confirmed, setConfirmed] = useState(false);
+  const navigate = useNavigate();
+
+  const handleConfirm = () => {
+    setConfirmed(true);
+    setTimeout(() => navigate("/pathways"), 1400);
+  };
 
   return (
     <PageTransition>
@@ -107,12 +114,13 @@ export default function Consultation() {
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setConfirmed(true)}
-                  className="w-full flex items-center justify-center gap-2 bg-coral text-white py-3.5 rounded-full font-semibold text-[14.5px] shadow-[0_10px_24px_rgba(255,90,60,0.35)] hover:bg-coral-dark transition-colors"
+                  whileHover={{ scale: confirmed ? 1 : 1.02 }}
+                  whileTap={{ scale: confirmed ? 1 : 0.98 }}
+                  onClick={handleConfirm}
+                  disabled={confirmed}
+                  className="w-full flex items-center justify-center gap-2 bg-coral text-white py-3.5 rounded-full font-semibold text-[14.5px] shadow-[0_10px_24px_rgba(255,90,60,0.35)] hover:bg-coral-dark transition-colors disabled:opacity-90"
                 >
-                  {confirmed ? `Confirmed for ${date}, ${time}` : "Confirm Appointment"}
+                  {confirmed ? `Confirmed for ${date}, ${time} — opening your pathways…` : "Confirm Appointment"}
                   {!confirmed && <ArrowRight className="w-4 h-4" />}
                 </motion.button>
               </div>

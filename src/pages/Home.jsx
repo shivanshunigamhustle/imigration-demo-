@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Search } from "lucide-react";
 import Navbar from "../components/Navbar";
@@ -21,6 +23,9 @@ const COLLAGE = [
 ];
 
 export default function Home() {
+  const navigate = useNavigate();
+  const [destination, setDestination] = useState("");
+
   return (
     <PageTransition>
       <div className="min-h-screen bg-cream overflow-x-clip">
@@ -52,12 +57,17 @@ export default function Home() {
 
               <Reveal direction="up" delay={0.28}>
                 <form
-                  onSubmit={(e) => e.preventDefault()}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    navigate("/destinations");
+                  }}
                   className="flex items-center gap-2 bg-white rounded-full p-2 pl-5 max-w-md shadow-[var(--shadow-card)] mb-8 focus-within:ring-2 ring-coral/30 transition-shadow"
                 >
                   <Search className="w-4.5 h-4.5 text-ink-faint shrink-0" />
                   <input
                     type="text"
+                    value={destination}
+                    onChange={(e) => setDestination(e.target.value)}
                     placeholder="Where do you want to go?"
                     className="flex-1 outline-none bg-transparent text-[14.5px] text-ink placeholder:text-ink-faint py-2"
                   />

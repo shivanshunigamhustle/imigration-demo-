@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Quote } from "lucide-react";
 import Navbar from "../components/Navbar";
@@ -23,6 +24,7 @@ const RESOURCES = [
 
 export default function Stories() {
   const [active, setActive] = useState("All");
+  const navigate = useNavigate();
 
   return (
     <PageTransition>
@@ -49,7 +51,14 @@ export default function Stories() {
           </Reveal>
 
           <div className="grid lg:grid-cols-[1.4fr_1fr] gap-6 mb-16">
-            <Reveal direction="right" className="relative rounded-3xl overflow-hidden shadow-[var(--shadow-card)] group">
+            <Reveal
+              direction="right"
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate("/consultation")}
+              onKeyDown={(e) => e.key === "Enter" && navigate("/consultation")}
+              className="relative rounded-3xl overflow-hidden shadow-[var(--shadow-card)] group cursor-pointer"
+            >
               <Img
                 src="/images/stories/ananya-graduation.jpg"
                 alt="Ananya Sharma at her graduation"
@@ -74,7 +83,11 @@ export default function Stories() {
             <Stagger className="flex flex-col gap-5" stagger={0.1}>
               {SIDE_STORIES.map((s) => (
                 <StaggerItem key={s.name}>
-                  <motion.div whileHover={{ x: 6 }} className="flex items-center gap-4 bg-white rounded-2xl p-3 shadow-[var(--shadow-soft)]">
+                  <motion.div
+                    whileHover={{ x: 6 }}
+                    onClick={() => navigate("/consultation")}
+                    className="flex items-center gap-4 bg-white rounded-2xl p-3 shadow-[var(--shadow-soft)] cursor-pointer"
+                  >
                     <Img src={s.img} alt={s.name} className="w-20 h-20 shrink-0" />
                     <div className="min-w-0">
                       <div className="text-[11.5px] font-semibold text-coral uppercase tracking-wide mb-0.5">{s.title}</div>
@@ -89,7 +102,7 @@ export default function Stories() {
 
           <Reveal direction="up" className="flex items-center justify-between mb-6">
             <h3 className="font-display text-[22px] font-semibold text-ink">Useful Resources</h3>
-            <button className="flex items-center gap-1 text-coral font-semibold text-[13.5px] group">
+            <button onClick={() => navigate("/consultation")} className="flex items-center gap-1 text-coral font-semibold text-[13.5px] group">
               View All <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </button>
           </Reveal>
@@ -97,7 +110,11 @@ export default function Stories() {
           <Stagger className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" stagger={0.08}>
             {RESOURCES.map((r) => (
               <StaggerItem key={r.title}>
-                <motion.div whileHover={{ y: -6 }} className="bg-white rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] h-full">
+                <motion.div
+                  whileHover={{ y: -6 }}
+                  onClick={() => navigate("/consultation")}
+                  className="bg-white rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] h-full cursor-pointer"
+                >
                   <Img src={r.img} alt={r.title} className="w-full h-32" rounded="rounded-none" />
                   <div className="p-4">
                     <h5 className="font-semibold text-[14px] text-ink mb-0.5">{r.title}</h5>

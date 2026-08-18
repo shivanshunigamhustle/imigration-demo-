@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, Gift } from "lucide-react";
 import Navbar from "../components/Navbar";
@@ -42,6 +43,12 @@ const COUNTRIES = [
 
 export default function Destinations() {
   const [active, setActive] = useState("All");
+  const navigate = useNavigate();
+  const filtersRef = useRef(null);
+
+  const scrollFilters = (dir) => {
+    filtersRef.current?.scrollBy({ left: dir * 160, behavior: "smooth" });
+  };
 
   return (
     <PageTransition>
@@ -57,12 +64,12 @@ export default function Destinations() {
           </Reveal>
 
           <Reveal direction="up" delay={0.1} className="flex items-center justify-center gap-3 mb-12">
-            <div className="flex flex-wrap justify-center gap-2 bg-white/70 p-1.5 rounded-full shadow-[var(--shadow-soft)]">
+            <div ref={filtersRef} className="flex flex-nowrap overflow-x-auto no-scrollbar justify-center gap-2 bg-white/70 p-1.5 rounded-full shadow-[var(--shadow-soft)] max-w-full">
               {FILTERS.map((f) => (
                 <button
                   key={f}
                   onClick={() => setActive(f)}
-                  className="relative px-4 py-2 rounded-full text-[13.5px] font-semibold transition-colors"
+                  className="relative shrink-0 px-4 py-2 rounded-full text-[13.5px] font-semibold transition-colors"
                 >
                   {active === f && (
                     <motion.span layoutId="filter-pill" className="absolute inset-0 bg-coral rounded-full" transition={{ type: "spring", bounce: 0.2, duration: 0.5 }} />
@@ -72,10 +79,18 @@ export default function Destinations() {
               ))}
             </div>
             <div className="hidden sm:flex items-center gap-2 ml-2">
-              <button className="w-9 h-9 rounded-full border border-ink/10 flex items-center justify-center text-ink-soft hover:bg-white transition-colors">
+              <button
+                onClick={() => scrollFilters(-1)}
+                aria-label="Scroll filters left"
+                className="w-9 h-9 rounded-full border border-ink/10 flex items-center justify-center text-ink-soft hover:bg-white transition-colors"
+              >
                 <ArrowLeft className="w-4 h-4" />
               </button>
-              <button className="w-9 h-9 rounded-full border border-ink/10 flex items-center justify-center text-ink-soft hover:bg-white transition-colors">
+              <button
+                onClick={() => scrollFilters(1)}
+                aria-label="Scroll filters right"
+                className="w-9 h-9 rounded-full border border-ink/10 flex items-center justify-center text-ink-soft hover:bg-white transition-colors"
+              >
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -113,6 +128,7 @@ export default function Destinations() {
                     </ul>
                     <motion.button
                       whileHover={{ x: 3 }}
+                      onClick={() => navigate("/pathways")}
                       className="w-full text-left flex items-center justify-between px-4 py-2.5 rounded-full bg-coral-50 text-coral font-semibold text-[13.5px] hover:bg-coral hover:text-white transition-colors"
                     >
                       Explore {c.name} <ArrowRight className="w-4 h-4" />
@@ -133,7 +149,12 @@ export default function Destinations() {
                 <p className="text-[14px] text-ink-soft">Take our free eligibility assessment and we'll recommend the best options for you.</p>
               </div>
             </div>
-            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="shrink-0 inline-flex items-center gap-2 bg-coral text-white px-6 py-3 rounded-full font-semibold text-[14px] shadow-[0_10px_24px_rgba(255,90,60,0.35)]">
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate("/consultation")}
+              className="shrink-0 inline-flex items-center gap-2 bg-coral text-white px-6 py-3 rounded-full font-semibold text-[14px] shadow-[0_10px_24px_rgba(255,90,60,0.35)]"
+            >
               Check My Eligibility <ArrowRight className="w-4 h-4" />
             </motion.button>
           </Reveal>
